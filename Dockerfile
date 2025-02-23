@@ -35,14 +35,17 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
-# Copy all necessary files for both standalone and non-standalone builds
+# Copy necessary build files
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
-# For standalone builds (if configured)
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/* ./ 2>/dev/null || true
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static 2>/dev/null || true
+# Create .next/static directory if it doesn't exist
+RUN mkdir -p .next/static
+
+# Copy static files if they exist (will not fail if directory doesn't exist)
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static/ 2>/dev/null || true
 
 USER nextjs
 
