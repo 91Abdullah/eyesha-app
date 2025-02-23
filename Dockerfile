@@ -33,19 +33,14 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# Copy built files
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
 
-# Copy necessary build files
-COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-
-# Create .next/static directory if it doesn't exist
-RUN mkdir -p .next/static
-
-# Copy static files if they exist (will not fail if directory doesn't exist)
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static/ 2>/dev/null || true
+# Set proper permissions
+RUN chown -R nextjs:nodejs .
 
 USER nextjs
 
