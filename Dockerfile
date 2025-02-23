@@ -35,10 +35,14 @@ RUN adduser --system --uid 1001 nextjs
 
 COPY --from=builder /app/public ./public
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copy all necessary files for both standalone and non-standalone builds
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+
+# For standalone builds (if configured)
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone/* ./ 2>/dev/null || true
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static 2>/dev/null || true
 
 USER nextjs
 
@@ -47,4 +51,5 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME localhost
 
-CMD ["node", "server.js"]
+# Start command that works for both standalone and non-standalone builds
+CMD ["npm", "start"]
