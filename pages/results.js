@@ -1,7 +1,7 @@
 export default function Results({ results }) {
     return (
       <div>
-        <h2>Biomarker Predictions</h2>
+        {/* <h2>Biomarker Predictions</h2>
         <div>
           {Object.entries(results).map(([group, biomarkers]) => (
             <div key={group}>
@@ -13,7 +13,7 @@ export default function Results({ results }) {
               </ul>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     );
   }
