@@ -77,7 +77,7 @@ const filterCategories = (categories, data) => {
   return filteredCategories;
 };
 
-const PDFReport = ({ data, imageUrl }) => {
+const PDFReport = ({ data, imageUrl, title = 'Biomarker Assessment Report' }) => {
   const filteredCategories = filterCategories(BIOMARKER_CATEGORIES, data);
 
   const getRiskLevel = (score) => {
@@ -120,7 +120,7 @@ const PDFReport = ({ data, imageUrl }) => {
     <div className="w-full p-8 bg-white min-h-screen">
       {/* Cover Page */}
       <div className="mb-12">
-        <h1 className="text-3xl font-bold mb-6">Biomarker Assessment Report</h1>
+        <h1 className="text-3xl font-bold mb-6">{title}</h1>
         <div className="grid grid-cols-2 gap-8">
           <div>
             <p className="text-gray-600">Assessment Date: {new Date().toLocaleDateString()}</p>

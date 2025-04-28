@@ -9,7 +9,9 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log('Checking token:', token);
     if (token) {
+      console.log('Token found:', token);
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);

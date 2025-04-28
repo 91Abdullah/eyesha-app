@@ -17,7 +17,7 @@ export default function Breadcrumbs() {
             <>
               <li key={`separator-${index}`} className="text-text">/</li>
               <li key={`breadcrumb-${index}`}>
-                <a href={href} className="text-text capitalize">{segment.replace(/-/g, ' ')}</a>
+                <a href={href} className="text-text capitalize">{segment == 'dr_analysis' ? "DR Analysis" : segment.replace(/-/g, ' ')}</a>
               </li>
             </>
           );
